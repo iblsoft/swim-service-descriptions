@@ -429,16 +429,12 @@
                 ],
                 "operations": [
                     {
-                        "name": "EDR operations",
-                        "description": "Standard EDR retrieval operations (collection discovery, position/area/trajectory queries, temporal subsetting).",
-                        "idempotency": "IDEMPOTENT",
+                        "name": "dataDelivery",
+                        "description": "<p>The requested information is contained directly in the AMQP message.</p>",
+                        "idempotency": "NON_IDEMPOTENT",
                         "messages": [
                             {
-                                "name": "EDR Request",
-                                "direction": "IN"
-                            },
-                            {
-                                "name": "EDR Response",
+                                "name": "getData",
                                 "direction": "OUT"
                             }
                         ]
