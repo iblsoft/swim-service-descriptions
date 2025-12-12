@@ -1,0 +1,26 @@
+# Example service descriptions (not to be tracked)
+METAR (IWXXM)_METEOFRANCE.json
+METAR in IWXXM_DWD.json
+TAF in IWXXM.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
