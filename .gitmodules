@@ -1,0 +1,3 @@
+[submodule "service-metadata-schema"]
+	path = service-metadata-schema
+	url = https://github.com/eurocontrol-swim/service-metadata-schema.git
