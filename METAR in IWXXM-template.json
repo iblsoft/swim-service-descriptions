@@ -121,7 +121,7 @@
             "name": "METAR in IWXXM",
             "version": "1.0"
         },
-        "serviceAbstract": "<p>The service provides the latest METAR and SPECI reports in IWXXM for !!COUNTRY aerodromes in compliance with ICAO Annex 3. The retrieval of information will be done on a regular basis (subscription) via AMQP 1.0 whereby the message contains the whole IWXXM dataset. The other option to collect the data is via Request/Reply using a WFS whereby the IWXXM-dataset is wrapped into a GML-FeatureType.</p>",
+        "serviceAbstract": "<p>The service provides the latest METAR and SPECI reports in IWXXM for !!COUNTRY aerodromes in compliance with ICAO Annex 3. The retrieval of information will be done on a regular basis (subscription) via AMQP 1.0 whereby the message contains the whole IWXXM dataset. The other option to collect the data is via Request/Reply using OGC EDR API, where the IWXXM data is provided in replies, in a ZIP archive.</p>",
         "serviceProvider": {
             "providerType": [
                 "REGULATED_METEOROLOGICAL_SERVICE_PROVIDER"
@@ -205,7 +205,7 @@
             "lifeCycle": [
                 {
                     "lifeCycleStage": "!!STAGE(OPERATIONAL|PROSPECTIVE|RETIRE",
-                    "from": "!!LIFECYCLE_STAGE_START_DATE(YYYY-MM-DD)"
+                    "from": "!!LIFECYCLE-STAGE-START-DATE(YYYY-MM-DD)"
                 }
             ]
         },
@@ -236,13 +236,13 @@
                 },
                 {
                     "name": "Request Data",
-                    "description": "<p>The consumer is able to request the data using OGC EDR</p>",
+                    "description": "<p>The consumer is able to request the data using OGC EDR.</p>",
                     "realWorldEffect": "Information has been shared; the service consumer gets the requested data."
                 },
                 {
                     "name": "Subscribe to Data",
-                    "description": "<p>The user is able to subscribe to data via AMQP while contacting DWD customer support.</p>",
-                    "realWorldEffect": "subscription was done"
+                    "description": "<p>The user is able to subscribe to data via AMQP by connecting to the predefined topics.</p>",
+                    "realWorldEffect": "Subscription has been established, consumer will receive data matching the subscription."
                 }
             ],
             "qualitiesOfService": {
@@ -253,27 +253,27 @@
                     },
                     {
                         "name": "Capacity",
-                        "description": "<p>Subscriptions are managed by DWD with consideration of the capacity of the technical infrastructure. Each connection is rate and connection limited to avoid overload of the system.</p>"
+                        "description": "<p>Subscriptions are managed with consideration of the capacity of the technical infrastructure. Each connection is rate and connection limited to avoid overload of the system.</p>"
                     }
                 ],
                 "reliability": [
                     {
                         "name": "Availability",
-                        "description": "<p>The technical infrastructure is highly available and maintained an availability &gt;99.8% during a month in the past. The system has intended downtimes &lt;5 minutes once a month for security patching.</p>"
+                        "description": "!!AVAILABILITY-STATEMENT"
                     },
                     {
                         "name": "Recoverability",
-                        "description": "<p>There exists a fallback system which ensures recovery after incidents.</p>"
+                        "description": "!!RECOVERABILITY-STATEMENT"
                     }
                 ],
                 "security": [
                     {
                         "name": "Integrity",
-                        "description": "<p>The service ensures integrity by using SWIM Technical Infrastructure (TI) Yellow Profile bindings.</p><p>All data contains an SHA256 checksum header to ensure integrity of the payload.</p>"
+                        "description": "Integrity is protected by using TLS layer for all the service interface bindings. However the Message Security based on S/MIME 4.0 proposed in SWIM TI Yellow Profile 2.0 is not yet implemented."
                     },
                     {
                         "name": "Confidentiality",
-                        "description": "<p>The service ensures confidentiality by using SWIM Technical Infrastructure (TI) Yellow Profile bindings.</p><p>Data delivery is only available for registered users. Additionally, users have their own subscriptions which are only readable by themselves to ensure confidentiality and completeness of the data.</p>"
+                        "description": "Data delivery is only available for registered users, who need to present their username and password for access to the services using HTTP Authorization header with Basic scheme for HTTP based connections, and using SASL plain for AMQP connections. !!MTLS-STATEMENT-OPTIONAL"
                     }
                 ]
             },
@@ -281,71 +281,69 @@
                 {
                     "name": "General Terms and Conditions of Business",
                     "type": "LEGAL_CONSTRAINT",
-                    "description": "<p><a href=\"https://www.dwd.de/EN/service/terms/terms_conditions_download.pdf?__blob=publicationFile&amp;v=8\">https://www.dwd.de/EN/service/terms/terms_conditions_download.pdf?__blob=publicationFile&amp;v=8</a></p>"
-                },
-                {
-                    "name": "Customization",
-                    "type": "SERVICE_POLICY",
-                    "description": "<p>Within the given constraints the user can customize the service to individual needs if applicable. DWD provides the service delivery from begin to the end of the subscription. If no start time is given, the subscription will be processed immediately. If no end time is given the subscription will be processed infinitely or up to the time when the service reaches the lifecycle status 'retired'.</p>"
+                    "description": "!!GENERAL-TERMS-AND-CONDITIONS-URL"
                 },
                 {
                     "name": "Information Retainment",
                     "type": "SERVICE_CONSUMPTION_CONSTRAINT",
-                    "description": "<p>According to ICAO Annex 3 the meteorological information is retained for a period of at least 30 days from the date of issue. This relates to the information itself and not the request time of the customer!</p>"
+                    "description": "Meteorological information is retained for a period of at least 30 days from the date of issue. This relates to the information itself and not the request time of the user."
                 },
                 {
                     "name": "Subscription",
                     "type": "SERVICE_CONSUMPTION_CONSTRAINT",
-                    "description": "<p>To subscribe, customers need to contact DWD at <a href=\"mailto:vl.kundenservice@dwd.de\">vl.kundenservice@dwd.de</a> and request access to the service. Multiple services may be combined into a single subscription if desired. For details, please refer to the documentation: <a href=\"https://swim.dwd.de/swim_docs/tutorial/getting_started.html#step-1-requesting-a-subscription\">https://swim.dwd.de/swim_docs/tutorial/getting_started.html#step-1-requesting-a-subscription</a></p>"
+                    "description": "To subscribe, customers need to contact !!CONTACT-EMAIL-FOR-SERVICE-SUPPORT and request access to the service."
                 },
                 {
                     "name": "Authentication",
                     "type": "SECURITY_CONSTRAINT",
-                    "description": "<p>The service ensures consumer authentication in accordance with EUROCONTROL Specification for SWIM Technical Infrastructure (TI) Yellow Profile requirement SWIM-TIYP-0042. The service ensures provider authentication in accordance with EUROCONTROL Specification for SWIM Technical Infrastructure (TI) Yellow Profile requirement SWIM-TIYP-0042.</p>"
+                    "description": "The service ensures client authentication in accordance with SWIM Technical Infrastructure (TI) Yellow Profile 2.0 requirement SWIM-TIYP-0042 by implementing username and password authentication using HTTP Authorization headers with Basic scheme for HTTPS based interfaces, and using SASL PLAIN for AMQP. !!MTLS-STATEMENT-OPTIONAL. The service ensures server authentication in accordance with SWIM-TIYP-0042.</p>"
                 },
                 {
                     "name": "Authorisation",
                     "type": "SECURITY_CONSTRAINT",
-                    "description": "<p>The service ensures that satisfactory authorisation is put in place according to EUROCONTROL Specification for SWIM Technical Infrastructure (TI) Yellow Profile requirement SWIM-TIYP-0070.</p>"
+                    "description": "The service ensures that satisfactory authorisation is put in place according to EUROCONTROL Specification for SWIM Technical Infrastructure (TI) Yellow Profile requirement SWIM-TIYP-0070."
                 },
                 {
                     "name": "Confidentiality",
                     "type": "SECURITY_CONSTRAINT",
-                    "description": "<p>The service ensures point-to-point confidentiality in accordance with EUROCONTROL Specification for SWIM Technical Infrastructure (TI) Yellow Profile through the use of Transport Layer Security (TLS) 1.2 or above.</p><p>The communication is encrypted by TLS with a certificate issued by the EACP.</p>"
+                    "description": "The service ensures point-to-point confidentiality in accordance with EUROCONTROL Specification for SWIM Technical Infrastructure (TI) Yellow Profile 2.0 through the use of Transport Layer Security (TLS) 1.3. The communication is encrypted by TLS with a certificate issued by the EACP."
                 },
                 {
                     "name": "Integrity",
                     "type": "SECURITY_CONSTRAINT",
-                    "description": "<p>The service ensures point-to-point integrity in accordance with EUROCONTROL Specification for SWIM Technical Infrastructure (TI) Yellow Profile through the use of Transport Layer Security (TLS) 1.2 or above.</p><p>The requested information may contain a signature using SHA256.</p>"
+                    "description": "The service ensures point-to-point integrity in accordance with EUROCONTROL Specification for SWIM Technical Infrastructure (TI) Yellow Profile through the use of Transport Layer Security (TLS) 1.3."
                 }
             ],
             "validation": [
                 {
                     "type": "SELF_VALIDATION",
                     "description": {
-                        "evidence": "Service tested by DWD"
+                        "evidence": "Service tested by the provider."
                     }
                 }
             ],
-            "dateInOperation": "2021-09-01"
+            "dateInOperation": "!!DATE-OF-SERVICE-OPERATION(YYYY-MM-DD)"
         },
         "informationDescription": {
             "filtering": {
                 "capability": [
                     {
-                        "name": "Filtering Capabilities WFS",
-                        "description": "<p>It is possible to add filters for the data which was extracted of the IWXXM data into the data scheme of the WFS service. At the moment this is:</p><ul><li>filename in WMO naming convention scheme</li><li>incoming date of the file</li><li>ICAO code of the aerodrome</li><li>ICAO name of the aerodrome</li></ul><p>A hanbook of how to use filters with WFS could be found on the OGC Website: <a href=\"https://www.ogc.org/standards/filter\">https://www.ogc.org/standards/filter</a></p><p>&nbsp;</p>",
+                        "name": "Filtering Capabilities OGC EDR",
+                        "description": "The EDR implementation builds on MET3SG community MET SWIM OGC EDR GUIDANCE. Additionally it supports OGC EDR filtering machanisms: cube query using a bbox parameter, area query with a polygon specified in coords parameter, radius query." ,
                         "reference": {
-                            "url": "https://docs.geoserver.org/stable/en/user/filter/"
+                            "url": "https://swim-eurocontrol.atlassian.net/wiki/spaces/MSS/pages/630194181/MET+SWIM+OGC+EDR+Guidance"
                         }
                     },
                     {
                         "name": "Filtering Capabilities AMQP",
-                        "description": "<p>At the moment its possible to have a simple filtering using the topic structure of the broker. It will be also possible at the moment upon request to have a private queue with self defined filters.</p>"
+                        "description": "Simple filtering is achieved using the topic structure of the broker, which determines the type of data recieved. AMQP SQL-like syntax for filters applied to AMQP application properties can be also used by the service consumer to further filter the data received.",
+                        "reference": {
+                            "url": "https://swim-eurocontrol.atlassian.net/wiki/spaces/MSS/pages/638156804/AMQP+Message+Structure+in+MET-SWIM"
+                        }
                     }
                 ]
             },
-            "sourceOfInformation": "The service provider ensures that the data offered within this service is created by DWD, a REGULATED_METEOROLOGICAL_SERVICE_PROVIDER",
+            "sourceOfInformation": "The service provider ensures that the data offered within this service is created by !!ORGANISATION-ABBREVIATION, a REGULATED_METEOROLOGICAL_SERVICE_PROVIDER.",
             "informationDefinition": {
                 "reference": [
                     {
@@ -356,51 +354,64 @@
         },
         "technicalDescription": {
             "serviceMonitoring": {
-                "monitoringDescription": "<p>The DWD IT components are montitored by 24/7 maintanance</p>\r\n"
+                "monitoringDescription": "For AMQP subscriptions, regular heartbeat messages are sent to weather.aviation.metar topic at approximately 60-second intervals. Arrival of the heartbeat message indicates that the main subsystems of the service are running."
             },
             "behaviour": [
                 {
                     "name": "Typical Request/Reply Behaviour",
-                    "description": "<p>The typical behaviour for REQUEST_REPLY is as follows:</p><ul><li>The request message is sent from the service consumer to the service</li><li>The service consumer remains blocked while awaiting the reply</li><li>The service remains blocked while processing the reply</li><li>The METAR-SPECI, the reply message, is sent from the service to the service consumer.</li></ul><p>In this case the service is based on WFS Geoserver and follows the behaviour of the Geoserver.</p>",
+                    "description": "<p>The typical behavior is following:</p><ul><li>Client sends request to the OGC EDR interface</li><li>The service replies with the appropriate HTTP response</li><li>If the request for specific IWXXM data is made, the service returns a zip archive with one or more files containing IWXXM messages.</li></ul>",
                     "reference": {
-                        "description": "<p>Geoserver Documentation</p>\r\n",
-                        "url": "https://docs.geoserver.org/"
+                        "description": "OGC EDR",
+                        "url": "https://ogcapi.ogc.org/edr/"
                     }
                 },
                 {
                     "name": "Typical Data Distribution Behaviour",
-                    "description": "<p>The service sends the data to subscribers when they are available and match their subscription (topic or queue) using the AMQP protocol.</p>"
+                    "description": "The service sends the data to subscribers when they are available and match their subscription using the AMQP protocol.",
+                    "reference": {
+                        "description": "AMQP Version 1.0",
+                        "url": "https://docs.oasis-open.org/amqp/core/v1.0/amqp-core-complete-v1.0.pdf"
+                    }
                 },
                 {
                     "name": "Typical Data Subscription Behaviour",
-                    "description": "<p>For subscribing to data the consumer needs to contact the DWD Aviation Customer Service and needs to request the credentials. After registration the consumer gets the endpoint to all DWD SWIM services.</p>"
+                    "description": "!!CUSTOMER-SUBSCRIPTION-INFORMATION"
                 }
             ]
         },
         "serviceInterface": [
             {
-                "name": "EDR Request",
-                "description": "The interface is used to receive the data via OGC API - EDR.",
+                "name": "OGC EDR Request Interface",
+                "description": "Allows the service consumer to request the latest available METAR/SPECIs via OGC API - EDR.",
                 "provisionSide": "PROVIDER_SIDE",
                 "endpoints": [
                     {
-                        "name": "",
-                        "description": "!!EDR_WEBSERVICE_DESCRIPTION",
-                        "url": "!!EDR_WEBSERVICE_URL"
+                        "name": "EDR base endpoint",
+                        "description": "!!EDR-WEBSERVICE-DESCRIPTION",
+                        "url": "!!EDR-WEBSERVICE-URL"
                     }
                 ],
                 "serviceInterfaceBinding": {
-                    "name": "WS Light",
-                    "description": "<p>The Service Interface Binding is SWIM Yellow Profile Compliant, using WS Light enabling HTTP GET requests and associated responses.</p>\r\n"
+                    "name": "SWIM_TI_YP_2_0_WS_LIGHT",
+                    "description": "The WS Light Interface Binding as detailed in the EUROCONTROL Specification for SWIM Technical Infrastructure Yellow Profile, edition 2.0.\r\n",
+                    "reference": {
+                        "description": "EUROCONTROL-SPEC-170 - EUROCONTROL Specification for SWIM Technical Infrastructure (TI) Yellow\r\n",
+                        "url": "https://www.eurocontrol.int/sites/default/files/2025-07/eurocontrol-spec-swim-tiyp-ed-2-0.pdf"
+                    }
+                
                 },
                 "networkInterfaceBinding": {
-                    "name": "IPV4_SECURE_UNICAST",
-                    "description": "<p>The Service implementation conforms with&nbsp;IPV4_SECURE_UNICAST as part of SWIM Yellow Profile requirements.</p>\r\n"
+                    "name": "SWIM_TI_YP_2_0_IPV4_UNICAST",
+                    "description": "Service supports IPv4 unicast.",
+                    "reference": {
+                        "description": "EUROCONTROL-SPEC-170 - EUROCONTROL Specification for SWIM Technical Infrastructure (TI) Yellow",
+                        "url": "https://www.eurocontrol.int/sites/default/files/2025-07/eurocontrol-spec-swim-tiyp-ed-2-0.pdf"
+                    }
                 },
                 "operations": [
                     {
                         "name": "EDR operations",
-                        "description": "Standard EDR retrieval operations (collection discovery, position/area/trajectory queries, temporal subsetting).",
+                        "description": "OGC API - Environmental Data Retrieval Standard is used to implement the service operations.",
                         "idempotency": "IDEMPOTENT",
                         "messages": [
                             {
@@ -408,76 +419,97 @@
                                 "direction": "IN"
                             },
                             {
-                                "name": "EDR Response",
+                                "name": "EDR Reply",
                                 "direction": "OUT"
                             }
                         ]
                     }
                 ],
-                "messageExchangePattern": "SYNCHRONOUS_REQUEST_RESPONSE"
+                "messages": [
+                    {
+                        "name": "EDR Request",
+                        "description": "Request message submitted to the EDR service containing query expressions for the EDR HTTP GET operation.",
+                        "schema": {
+                            "description": "The EDR requests for the METAR/SPECI data are based on the OGC EDR https://ogcapi.ogc.org/edr/ specifications and Eurocontrol MET SWIM OGC EDR Guidance.",
+                            "url": "https://swim-eurocontrol.atlassian.net/wiki/spaces/MSS/pages/630194181/MET+SWIM+OGC+EDR+Guidance"
+                        },
+                        "isError": false
+                    },
+                    {
+                        "name": "EDR Reply",
+                        "description": "The message that is an output of the EDR service.",
+                        "schema": {
+                            "description": "The EDR replies for the METAR/SPECI data requests are based on the OGC EDR https://ogcapi.ogc.org/edr/ specifications and Eurocontrol MET SWIM OGC EDR Guidance.",
+                            "url": "https://swim-eurocontrol.atlassian.net/wiki/spaces/MSS/pages/630194181/MET+SWIM+OGC+EDR+Guidance"
+                        },
+                        "isError": false
+                    }
+                ]
             },
             {
-                "name": "AMQP Push Service",
-                "description": "<p>The interface is used to receive the data which are subscribed to.</p>",
+                "name": "AMQP Distribution Interface",
+                "description": "Allows the service provider to distribute the latest available METAR/SPECIs, meeting the need of the service consumer that has subscribed for updates.",
                 "provisionSide": "PROVIDER_SIDE",
                 "endpoints": [
                     {
-                        "name": "RabbitMQBrokerDWD",
-                        "description": "<p>This is the connection between the service provider and the customer via AMQP1.0 to receive notification related to the customer's subscription.</p>",
-                        "url": "http://endpoint.dwd.de"
+                        "name": "AMQP base endpoint",
+                        "description": "The base endpoint for AMQP subscriptions, from which AMQP messages may be retrieved",
+                        "url": "!!AMQP-BROKER-URL"
                     }
                 ],
+                "serviceInterfaceBinding": {
+                    "name": "SWIM_TI_YP_2_0_AMQP_MESSAGING",
+                    "description": "The AMQP_MESSAGING Interface Binding as detailed in the EUROCONTROL Specification for SWIM Technical Infrastructure Yellow Profile, edition 2.0"
+                },
+                "networkInterfaceBinding": {
+                    "name": "SWIM_TI_YP_2_0_IPV4_UNICAST",
+                    "description": "Service supports IPv4 unicast",
+                    "reference": {
+                        "description": "EUROCONTROL-SPEC-170 - EUROCONTROL Specification for SWIM Technical Infrastructure (TI) Yellow",
+                        "url": "https://www.eurocontrol.int/sites/default/files/2025-07/eurocontrol-spec-swim-tiyp-ed-2-0.pdf"
+                    }
+                },
                 "operations": [
                     {
-                        "name": "dataDelivery",
-                        "description": "<p>The requested information is contained directly in the AMQP message.</p>",
-                        "idempotency": "NON_IDEMPOTENT",
+                        "name": "Publish",
+                        "description": "The requested information is contained directly in the AMQP message",
+                        "idempotency": "IDEMPOTENT",
                         "messages": [
                             {
-                                "name": "getData",
+                                "name": "AMQP Message",
                                 "direction": "OUT"
                             }
                         ]
                     }
                 ],
-                "messageExchangePattern": "FIRE_AND_FORGET"
-            },
-            {
-                "name": "SubscriptionManagement",
-                "description": "<p>The following section describes details how to subscribe and unsubscribe to this service.</p>",
-                "provisionSide": "PROVIDER_SIDE",
-                "operations": [
+                "messages": [
                     {
-                        "name": "Contact",
-                        "description": "<p>At the moment subscribing or unsubscribing to this service is only possible by contacting the DWD Aviation Customer Service. Contact details are found in the general part of the service description.</p>",
-                        "idempotency": "NON_IDEMPOTENT"
+                        "name": "AMQP Message",
+                        "description": "The message that is an output of the service, containing the METAR/SPECI information",
+                        "schema": {
+                            "description": "The format of the AMQP Messages provided by the service is based on the Eurocontrol Guidance materials for AMQP Message Structure in MET-SWIM",
+                            "url": "https://swim-eurocontrol.atlassian.net/wiki/spaces/MSS/pages/638156804/AMQP+Message+Structure+in+MET-SWIM"
+                        },
+                        "isError": false
                     }
-                ],
-                "messageExchangePattern": "SYNCHRONOUS_REQUEST_RESPONSE"
+                ]
             }
         ],
         "references": {
-            "serviceDocument": [
-                {
-                    "documentType": "POLICY_DOCUMENT",
-                    "title": "Appendix A: References",
-                    "version": "-",
-                    "description": "<p><a href=\"https://swim-eurocontrol.atlassian.net/wiki/spaces/MSS/pages/60162182/IWXXM+METAR-SPECI+Subscription+and+Request+Service+-+Service+Definition#IWXXMMETAR-SPECISubscriptionandRequestService-ServiceDefinition-AppendixA:References\">https://swim-eurocontrol.atlassian.net/wiki/spaces/MSS/pages/60162182/IWXXM+METAR-SPECI+Subscription+and+Request+Service+-+Service+Definition#IWXXMMETAR-SPECISubscriptionandRequestService-ServiceDefinition-AppendixA:References</a></p>"
-                },
-                {
-                    "documentType": "POLICY_DOCUMENT",
-                    "title": "Appendix B: Operational Needs",
-                    "version": "-",
-                    "description": "<p><a href=\"https://swim-eurocontrol.atlassian.net/wiki/spaces/MSS/pages/60162182/IWXXM+METAR-SPECI+Subscription+and+Request+Service+-+Service+Definition#IWXXMMETAR-SPECISubscriptionandRequestService-ServiceDefinition-AppendixB:OperationalNeeds\">https://swim-eurocontrol.atlassian.net/wiki/spaces/MSS/pages/60162182/IWXXM+METAR-SPECI+Subscription+and+Request+Service+-+Service+Definition#IWXXMMETAR-SPECISubscriptionandRequestService-ServiceDefinition-AppendixB:OperationalNeeds</a></p>"
-                },
-                {
-                    "documentType": "SERVICE_STANDARD",
-                    "title": "Meteorological SWIM Services Subscription Interface Standard",
-                    "version": "-",
-                    "description": "<p><a href=\"https://swim-eurocontrol.atlassian.net/wiki/spaces/MSS/pages/60162052/Meteorological+SWIM+Services+Subscription+Interface+Standard\">https://swim-eurocontrol.atlassian.net/wiki/spaces/MSS/pages/60162052/Meteorological+SWIM+Services+Subscription+Interface+Standard</a></p>"
-                }
-            ],
             "implementedStandard": [
+                {
+                    "title": "EUROCONTROL SWIM-TI Yellow Profile",
+                    "standardType": "EUROCONTROL_SPECIFICATION_FOR_SWIM_TECHNICAL_INFRASTRUCTURE",
+                    "conformanceStatement": "is compliant",
+                    "version": "2.0"
+                },
+                {
+                    "title": "EUROCONTROL SWIM Service Description",
+                    "standardType": "EUROCONTROL_SPECIFICATION_FOR_SWIM_SERVICE_DESCRIPTION",
+                    "conformanceStatement": "is compliant",
+                    "version": "2.0",
+                    "description": "Description of Service according to EUROCONTROL specifications"
+                },
                 {
                     "title": "Environmental Data Retrieval (EDR)",
                     "standardType": "EUROCONTROL_SPECIFICATION_FOR_SWIM_TECHNICAL_INFRASTRUCTURE",
