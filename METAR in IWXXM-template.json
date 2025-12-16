@@ -24,6 +24,10 @@
                     "description": "Air Traffic Management"
                 },
                 {
+                    "name": "EACP",
+                    "description": "European Aviation Common PKI"
+                },
+                {
                     "name": "!!ORGANISATION-ABBREVIATION",
                     "description": "!!FULL-ORGANISATION_NAME"
                 },
