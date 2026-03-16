@@ -473,7 +473,7 @@
                     {
                         "name": "Publish",
                         "description": "The requested information is contained directly in the AMQP message",
-                        "idempotency": "IDEMPOTENT",
+                        "idempotency": "NON_IDEMPOTENT",
                         "messages": [
                             {
                                 "name": "AMQP Message",
